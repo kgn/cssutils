@@ -47,6 +47,8 @@ class Preferences(object):
         format ``url(URI)`` if ``'uri'``
     indent = 4 * ' '
         Indentation of e.g Properties inside a CSSStyleDeclaration
+    indentEndingSemicolon = True
+        Indentation the last semicolon to match the indentation level of the block
     indentSpecificities = False
         Indent rules with subset of Selectors and higher Specitivity
 
@@ -124,6 +126,7 @@ class Preferences(object):
         self.importHrefFormat = None
         self.indent = 4 * u' '
         self.indentSpecificities = False
+        self.indentEndingSemicolon = True
         self.keepAllProperties = True
         self.keepComments = True
         self.keepEmptyRules = False
@@ -564,7 +567,7 @@ class CSSSerializer(object):
         out.extend(rulesout)
 
         #     }
-        out.append(u'%s}' % ((self._level + 1) * self.prefs.indent))
+        out.append(u'%s}' % ((self._level + int(self.prefs.indentEndingSemicolon)) * self.prefs.indent))
 
         return u''.join(out)
 
@@ -694,7 +697,7 @@ class CSSSerializer(object):
                     self.prefs.lineSeparator,
                     self._indentblock(styleText, self._level + 1),
                     self.prefs.lineSeparator,
-                    (self._level + 1) * self.prefs.indent),
+                    (self._level + int(self.prefs.indentEndingSemicolon)) * self.prefs.indent),
                 self._selectorlevel)
 
     def do_css_SelectorList(self, selectorlist):
